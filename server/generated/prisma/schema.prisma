@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String       @id @default(uuid())
+  email            String       @unique
+  password         String
+  name             String
+  role             Role // 'TEACHER' | 'STUDENT'
+  classroomsTaught Classroom[]  @relation("ClassroomTeacher")
+  enrollments      Enrollment[]
+  createdAt        DateTime     @default(now())
+  Attendance       Attendance[]
+}
+
+model Classroom {
+  id          String       @id @default(uuid())
+  name        String
+  subject     String
+  teacher     User         @relation("ClassroomTeacher", fields: [teacherId], references: [id])
+  teacherId   String
+  enrollments Enrollment[]
+  attendances Attendance[]
+  createdAt   DateTime     @default(now())
+}
+
+model Enrollment {
+  id          String    @id @default(uuid())
+  student     User      @relation(fields: [studentId], references: [id])
+  studentId   String
+  classroom   Classroom @relation(fields: [classroomId], references: [id])
+  classroomId String
+  enrolledAt  DateTime  @default(now())
+
+  @@unique([studentId, classroomId]) // นักเรียนคนหนึ่ง enroll คลาสนั้นได้ครั้งเดียว
+}
+
+model Attendance {
+  id          String           @id @default(uuid())
+  classroom   Classroom        @relation(fields: [classroomId], references: [id])
+  classroomId String
+  student     User             @relation(fields: [studentId], references: [id])
+  studentId   String
+  status      AttendanceStatus // PRESENT | LATE | ABSENT
+  timestamp   DateTime         @default(now())
+
+  @@unique([classroomId, studentId, timestamp])
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+}
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  ABSENT
+}
