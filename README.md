@@ -81,4 +81,13 @@
 | **View Class Schedule**   | Displays the schedule or registered classes for the student.                    | `/api/student/classroom`                    | GET        | Class Management       |
 | **Check-in for Class**    | Allows students to check in for a class on the specified date (if still valid). | `/api/student/classroom/:id/attendance`     | POST       | Attendance Management  |
 | **View Attendance History** | Shows attendance history (Present / Absent / Late).                           | `/api/student/attendance/history`           | GET        | Attendance Management  |
-| **Edit Profile**          | Enables students to update their personal information.                          | `/api/auth/profile`                         | PUT        | Account Management     |
+| **Edit Profile**          | Enables students to update their personal information.                          | `/api/auth/profile`                         | PUT        | 
+Account Management     |
+
+### Environment Variables
+
+| **Variable**       | **Description**                              |
+|---------------------|----------------------------------------------|
+| `DATABASE_URL`      | Connection string for the database.          |
+| `JWT_SECRET`        | Secret key used for signing JSON Web Tokens. |
+| `PORT`              | Port number on which the server runs.        |
