@@ -13,8 +13,14 @@ const {
   getAttendanceReport,
   updateAttendanceStatus,
 } = require("../controllers/teacherController");
+const requireTeacher = require("../middlewares/requireTeacher");
+
+
 
 const router = express.Router();
+
+// ✅ Apply middleware to all teacher routes
+router.use(requireTeacher);
 
 router.post("/classroom", createClassroom);
 router.get("/classroom", getMyClassrooms);

@@ -19,10 +19,11 @@ model User {
   email            String       @unique
   password         String
   name             String
-  role             Role // 'TEACHER' | 'STUDENT'
+  role             Role
   classroomsTaught Classroom[]  @relation("ClassroomTeacher")
   enrollments      Enrollment[]
   createdAt        DateTime     @default(now())
+  deletedAt        DateTime?    // 👈 Soft delete
   Attendance       Attendance[]
 }
 
@@ -35,7 +36,9 @@ model Classroom {
   enrollments Enrollment[]
   attendances Attendance[]
   createdAt   DateTime     @default(now())
+  deletedAt   DateTime?    // 👈 Soft delete
 }
+
 
 model Enrollment {
   id          String    @id @default(uuid())
@@ -66,7 +69,7 @@ enum Role {
 }
 
 enum AttendanceStatus {
-  PRESENT
+  PRESENT 
   LATE
   ABSENT
 }

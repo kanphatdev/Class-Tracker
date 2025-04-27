@@ -83,3 +83,34 @@ exports.getCurrentUser = async (req, res) => {
 exports.logout = (req, res) => {
   res.json({ message: "Logout success (handled on client side)" });
 };
+// 👉 PUT /api/auth/edit
+exports.editUser = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { name, email, password } = req.body;
+
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (password) {
+      const hashed = await bcrypt.hash(password, 10);
+      updateData.password = hashed;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: decoded.userId },
+      data: updateData,
+      select: { id: true, name: true, email: true, role: true },
+    });
+
+    res.json({ message: "User updated", user: updatedUser });
+  } catch (error) {
+    res.status(400).json({ error: "Failed to update user", detail: error.message });
+  }
+};
