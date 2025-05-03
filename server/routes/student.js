@@ -17,7 +17,7 @@ const router = express.Router();
 // ✅ Apply middleware to all student routes
 router.use(requireStudent);
 
-router.get("/classroom", getMyClassrooms);
+router.get("/classroom", getMyClassrooms); 
 router.post("/classroom/:id/attendance", checkIn);
 router.get("/attendance/history", getAttendanceHistory);
 router.get("/attendance/classroom/:id", getAttendanceByClass);

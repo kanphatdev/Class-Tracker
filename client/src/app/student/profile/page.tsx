@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import useProfile from '@/hooks/useProfile';
+import useProfile from "@/hooks/useProfile";
 
 const StudentProfilePage = () => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
   const { profile, loading, error } = useProfile(token);
 
-  if (loading) return <div className="loading loading-spinner text-primary"></div>;
+  if (loading) return <p>Loading...</p>;
   if (error || !profile)
-    return <div className="alert alert-error">โหลดข้อมูลไม่สำเร็จ</div>;
+    return <p className="text-error">โหลดข้อมูลไม่สำเร็จ</p>;
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-primary">My Profile</h1>
+      <h1 className="text-3xl font-bold mb-6">My Profile</h1>
 
-      <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+    <div className="flex flex-col md:flex-row items-center justify-center gap-6">
       <div className="avatar">
         <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
         <span className="text-4xl flex items-center justify-center h-full bg-neutral text-neutral-content">
